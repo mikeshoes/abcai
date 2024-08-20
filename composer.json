@@ -1,0 +1,33 @@
+{
+  "name": "mosuky/abcai",
+  "description": "digital mall",
+  "version": "1.0.0",
+  "type": "libaray",
+  "keywords": [
+    "framework",
+    "thinkphp",
+    "ORM",
+    "Mall"
+  ],
+  "homepage": "http://thinkphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "mushuky",
+      "email": "a290942762@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "topthink/framework": "^6.1",
+    "topthink/think-orm": "^2.0"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^4.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "abcai": "src/"
+    }
+  }
+}
