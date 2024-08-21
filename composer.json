@@ -1,6 +1,6 @@
 {
   "name": "moshuky/tpcai",
-  "description": "digital mall",
+  "description": "tp framework",
   "type": "library",
   "keywords": [
     "framework",
@@ -8,7 +8,7 @@
     "ORM",
     "Mall"
   ],
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "mushuky",
