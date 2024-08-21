@@ -3,3 +3,4 @@
 *.log
 /vendor
 .env
+composer.lock
