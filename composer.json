@@ -1,6 +1,7 @@
 {
   "name": "moshuky/abcai",
   "description": "digital mall",
+  "minimum-stability": "stable",
   "keywords": [
     "framework",
     "thinkphp",
