@@ -25,5 +25,5 @@
       "cores\\": "src/cores"
     }
   },
-  "minimum-stability": "stable"
+  "minimum-stability": "dev"
 }
