@@ -1,14 +1,14 @@
 {
   "name": "moshuky/abcai",
   "description": "digital mall",
-  "minimum-stability": "stable",
+  "type": "library",
   "keywords": [
     "framework",
     "thinkphp",
     "ORM",
     "Mall"
   ],
-  "license": "Apache-2.0",
+  "license": "proprietary",
   "authors": [
     {
       "name": "mushuky",
@@ -24,5 +24,6 @@
     "psr-4": {
       "abcai\\": "src/"
     }
-  }
+  },
+  "minimum-stability": "stable"
 }
