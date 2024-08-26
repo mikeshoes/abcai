@@ -81,9 +81,9 @@ class Base
      * @param string $url 请求地址
      * @param array $data
      * @return string $result
-     * @throws \cores\exception\BaseException
+     * @throws BaseException
      */
-    protected function get(string $url, array $data = [])
+    protected function get(string $url, array $data = []): string
     {
         // 处理query参数
         if (!empty($data)) {
