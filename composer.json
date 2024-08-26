@@ -21,7 +21,8 @@
     "topthink/think-orm": "^2.0",
     "ramsey/uuid": "^4.2",
     "ext-curl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-openssl": "*"
   },
   "autoload": {
     "psr-4": {
