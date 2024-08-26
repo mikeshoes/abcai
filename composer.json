@@ -19,7 +19,9 @@
     "php": ">=7.4.0",
     "topthink/framework": "^6.1",
     "topthink/think-orm": "^2.0",
-    "ramsey/uuid": "^4.2"
+    "ramsey/uuid": "^4.2",
+    "ext-curl": "*",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
