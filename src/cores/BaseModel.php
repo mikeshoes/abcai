@@ -7,6 +7,7 @@ namespace cores;
 use cores\traits\AutoField;
 use cores\traits\ErrorTrait;
 use cores\traits\SoftDelete;
+use Ramsey\Uuid\Uuid;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
