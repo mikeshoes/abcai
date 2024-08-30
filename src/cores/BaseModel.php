@@ -12,10 +12,8 @@ use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\db\Query;
-use think\exception\ValidateException;
 use think\facade\Log;
 use think\helper\Str;
-use think\Model;
 use think\model\Pivot;
 use think\Paginator;
 

@@ -33,7 +33,7 @@ class AuditLog
         $action = $request->action();
         $params = $request->param();
         $refer = $request->header('referer');
-        $saas_id = $request->header("saasId") ?? 0;
+        $saas_id = \getSaasId();
         $user_id = 0;
         $user_name = '';
         if ($user = $request->user()) {

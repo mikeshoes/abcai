@@ -20,6 +20,7 @@ use think\Paginator;
  * @method static Model get($where, $with = []) 根据Id获取数据
  * @method static deleteAll(array $where) 删除记录
  * @method static bool deleteByUcode(string $ucode) 根据ucode删除数据
+ * @method static Model withoutGlobalScope() 不应用全局scope
  */
 class BaseService
 {
