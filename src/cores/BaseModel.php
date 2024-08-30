@@ -41,7 +41,7 @@ abstract class BaseModel extends Pivot
     protected bool $isGlobalScopeSassId = true;
 
     // 默认删除字段值
-    protected $defaultSoftDelete = 1;
+    protected $defaultSoftDelete = 0;
 
     protected string $deleteField = 'is_del';
 
