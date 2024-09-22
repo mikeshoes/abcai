@@ -4,6 +4,7 @@ namespace cores\middleware;
 
 use cores\exception\DenyException;
 use cores\exception\UnAuthenticatedException;
+use cores\library\PropertyClass;
 use cores\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -49,7 +50,7 @@ class RemoteAuthenticate
 
             // 你可以根据远程服务的响应进一步处理，比如检查用户身份是否有效
             $request->setUserResolver(function () use ($res) {
-                return $res['data'];
+                return new PropertyClass($res['data']);
             });
 
             $request->header("Saasid", $res['data']['saas_id']);
