@@ -22,7 +22,8 @@
     "ramsey/uuid": "^4.2",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "guzzlehttp/guzzle": "8.0.x-dev"
   },
   "autoload": {
     "psr-4": {
