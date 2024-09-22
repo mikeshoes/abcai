@@ -13,4 +13,9 @@ class Request extends \think\Request
 
     // 全局过滤规则
     protected $filter = [];
+
+    public function addHeader($name, $value)
+    {
+        $this->header[$name] = $value;
+    }
 }

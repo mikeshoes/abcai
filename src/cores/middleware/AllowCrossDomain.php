@@ -39,6 +39,7 @@ class AllowCrossDomain
             'Access-Token',
             'saasId',
             'platform',
+            'isLog',
         ];
     }
 
