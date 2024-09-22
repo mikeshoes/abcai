@@ -11,6 +11,7 @@ class AuditLog
 
     public function handle(Request $request, \Closure $next)
     {
+        $request->addHeader('isLog', 1);
         $response = $next($request);
         $audit = $this->getAuditLogInfo($request, $response);
         if ($audit) {
