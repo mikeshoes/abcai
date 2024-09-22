@@ -19,7 +19,7 @@ class RemoteAuthenticate
     public function handle(Request $request, \Closure $next)
     {
         // 获取远程用户中心的地址
-        $remoteAuthUrl = config('app.remote_aut_address');
+        $remoteAuthUrl = config('app.remote_auth_address');
 
         if (empty($remoteAuthUrl)) {
             throw new DenyException();
