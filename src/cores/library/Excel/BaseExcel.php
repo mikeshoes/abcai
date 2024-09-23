@@ -60,7 +60,7 @@ abstract class BaseExcel
     {
     }
 
-    public function download(): Response
+    public function download()
     {
         $spreadSheet = new Spreadsheet();
         $spreadSheet->getActiveSheet()->setTitle($this->sheetName);
@@ -73,7 +73,7 @@ abstract class BaseExcel
         // 添加数据
         $this->addData($spreadSheet);
         // 输出流
-        return $this->output($spreadSheet);
+        $this->output($spreadSheet);
     }
 
     /**
@@ -145,12 +145,19 @@ abstract class BaseExcel
     private function output(Spreadsheet $spreadsheet)
     {
         // 响应头用于文件下载
-        return Response::create(function () use ($spreadsheet) {
-            // 创建 Xlsx 文件流
-            $writer = new Xlsx($spreadsheet);
-            // 输出到 PHP 输出流
-            $writer->save('php://output');
-        }, 'file')->name($this->fileName);
+        // 清除输出缓冲区
+        ob_end_clean();
+        // 设置响应头
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $this->fileName . '.xlsx"');
+        header('Cache-Control: max-age=0');
+        header('Pragma: public');
+
+        // 创建 Xlsx 文件流并输出到 PHP 输出流
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        // 终止脚本以防止其他输出
+        exit;
     }
 
     private function addHeaderRow(Spreadsheet $spreadsheet)
