@@ -52,12 +52,12 @@ abstract class BaseExcel
         $spreadSheet->getActiveSheet()->setTitle($this->sheetName);
         // 添加属性
         $this->addProperties($spreadSheet);
-        // 允许外部修改spreadsheet的接口
-        $this->beforeDownload($spreadSheet);
         // 添加头数据
         $this->addHeaderRow($spreadSheet);
         // 添加数据
         $this->addData($spreadSheet);
+        // 允许外部修改spreadsheet的接口
+        $this->beforeDownload($spreadSheet);
         // 输出流
         $this->output($spreadSheet);
     }
