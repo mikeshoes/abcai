@@ -22,45 +22,27 @@ abstract class BaseExcel
     protected array $messages = [];
     protected array $fields = [];
     protected array $titles = [];
-    private int $headingRow = 0;
+    protected int $headingRow = 0;
     protected string $headerExplain = '';
     protected string $fileName;
     protected string $sheetName;
     protected bool $interruptOnFail = false;
-
-    public function __construct(
-        $data = [],
-        $titles = [],
-        string $fileName = '',
-        string $headerExplain = '',
-        array $properties = [],
-        string $sheetName = ''
-    )
-    {
-        $this->titles = $titles;
-        $this->fileName = $fileName;
-        $this->properties = $properties;
-        $this->data = $data;
-        $this->headerExplain = $headerExplain;
-        $this->sheetName = $sheetName;
-        if (!empty($this->titles)) {
-            $this->headingRow++;
-        }
-        if (!empty($this->headerExplain)) {
-            $this->headingRow++;
-        }
-    }
 
     public function properties(): array
     {
         return $this->properties;
     }
 
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
     protected function beforeDownload(Spreadsheet $spreadsheet)
     {
     }
 
-    public function download()
+    public function download(): Response
     {
         $spreadSheet = new Spreadsheet();
         $spreadSheet->getActiveSheet()->setTitle($this->sheetName);
@@ -73,7 +55,7 @@ abstract class BaseExcel
         // 添加数据
         $this->addData($spreadSheet);
         // 输出流
-        $this->output($spreadSheet);
+        return $this->output($spreadSheet);
     }
 
     /**
@@ -145,19 +127,12 @@ abstract class BaseExcel
     private function output(Spreadsheet $spreadsheet)
     {
         // 响应头用于文件下载
-        // 清除输出缓冲区
-        ob_end_clean();
-        // 设置响应头
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="' . $this->fileName . '.xlsx"');
-        header('Cache-Control: max-age=0');
-        header('Pragma: public');
-
-        // 创建 Xlsx 文件流并输出到 PHP 输出流
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
-        // 终止脚本以防止其他输出
-        exit;
+        return Response::create(function () use ($spreadsheet) {
+            // 创建 Xlsx 文件流
+            $writer = new Xlsx($spreadsheet);
+            // 输出到 PHP 输出流
+            $writer->save('php://output');
+        }, 'file')->name($this->fileName);
     }
 
     private function addHeaderRow(Spreadsheet $spreadsheet)
