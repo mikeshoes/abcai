@@ -13,11 +13,11 @@ class WhiteListNetAccess
         '10.10.0.0/16',    // 单个IP
     ];
 
-    public function handle(Request $request, \Closure $next, string $whitelist)
+    public function handle(Request $request, \Closure $next, ...$whitelist)
     {
         $clientIp = $request->ip();
         // 检查 IP 是否在白名单中
-        $whitelist = $this->whitelist + explode(',', $whitelist);
+        $whitelist = array_merge($this->whitelist, $whitelist);
         if (!$this->ipInWhitelist($clientIp, $whitelist)) {
             throw new DenyException();
         }
