@@ -3,14 +3,18 @@
 namespace cores\library\Excel;
 
 use cores\library\Excel\Exception\TemplateException;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use think\exception\ValidateException;
 use think\facade\Validate;
 use think\file\UploadedFile;
 use think\helper\Str;
-use think\Response;
 
 abstract class BaseExcel
 {
@@ -42,7 +46,7 @@ abstract class BaseExcel
     {
     }
 
-    public function download(): Response
+    public function download()
     {
         $spreadSheet = new Spreadsheet();
         $spreadSheet->getActiveSheet()->setTitle($this->sheetName);
@@ -55,7 +59,7 @@ abstract class BaseExcel
         // 添加数据
         $this->addData($spreadSheet);
         // 输出流
-        return $this->output($spreadSheet);
+        $this->output($spreadSheet);
     }
 
     /**
@@ -126,13 +130,20 @@ abstract class BaseExcel
 
     private function output(Spreadsheet $spreadsheet)
     {
-        // 响应头用于文件下载
-        return Response::create(function () use ($spreadsheet) {
-            // 创建 Xlsx 文件流
-            $writer = new Xlsx($spreadsheet);
-            // 输出到 PHP 输出流
-            $writer->save('php://output');
-        }, 'file')->name($this->fileName);
+        // 创建 Xlsx 文件流
+        // 清除输出缓冲区
+        ob_end_clean();
+        // 设置响应头
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header(vsprintf('Content-Disposition: attachment; filename="%s"', [rawurlencode($this->fileName)]));
+        header('Cache-Control: max-age=0');
+        header('Pragma: public');
+
+        // 创建 Xlsx 文件流并输出到 PHP 输出流
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        // 终止脚本以防止其他输出
+        exit;
     }
 
     private function addHeaderRow(Spreadsheet $spreadsheet)
@@ -144,13 +155,51 @@ abstract class BaseExcel
         $worksheet = $spreadsheet->getActiveSheet();
         $headers = [];
         if (!empty($this->headerExplain)) {
-            $headers[] = $this->headerExplain;
+            $headers[] = [$this->headerExplain];
+            $this->explainStyle($worksheet, 'A1');
         }
 
         if (!empty($this->titles)) {
             $headers[] = array_values($this->titles);
+            // title列增加效果
+            $row = count($headers);
+            $columnIndex = count($this->titles);
+            $column = Coordinate::stringFromColumnIndex($columnIndex);
+            $cellRange = "A{$row}:{$column}{$row}";
+            $this->headerStyle($worksheet, $cellRange);
         }
         $worksheet->fromArray($headers);
+    }
+
+    private function explainStyle($sheet, $headerRange)
+    {
+        // 设置字体样式：加粗、字体大小、字体颜色
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+        $sheet->getStyle($headerRange)->getFont()->setSize(14);
+        $sheet->getStyle($headerRange)->getFont()->getColor()->setARGB(Color::COLOR_WHITE); // 设置字体为白色
+        // 设置背景颜色：设置背景为渐变色或纯色
+        $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID);
+        $sheet->getStyle($headerRange)->getFill()->getStartColor()->setARGB(Color::COLOR_YELLOW); // 设置背景为黄色
+    }
+
+    private function headerStyle($sheet, $headerRange)
+    {
+        // 设置字体样式：加粗、字体大小、字体颜色
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+        $sheet->getStyle($headerRange)->getFont()->setSize(14);
+        $sheet->getStyle($headerRange)->getFont()->getColor()->setARGB(Color::COLOR_WHITE); // 设置字体为白色
+        // 设置背景颜色：设置背景为渐变色或纯色
+        $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID);
+        $sheet->getStyle($headerRange)->getFill()->getStartColor()->setARGB(Color::COLOR_CYAN); // 设置背景为绿色
+
+// 设置边框样式
+        $sheet->getStyle($headerRange)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        $sheet->getStyle($headerRange)->getBorders()->getAllBorders()->getColor()->setARGB(Color::COLOR_BLACK); // 设置黑色边框
+
+// 设置文本对齐方式：水平居中、垂直居中
+        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle($headerRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
     }
 
     private function addData(Spreadsheet $spreadsheet)
