@@ -12,7 +12,6 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use think\exception\ValidateException;
-use think\facade\Validate;
 use think\file\UploadedFile;
 use think\helper\Str;
 
@@ -96,9 +95,10 @@ abstract class BaseExcel
             foreach ($cellIterator as $cell) {
                 $temData[] = $cell->getValue(); // 获取单元格的值
             }
-
             $validData = array_combine(array_keys($this->titles), $temData);
-            $validator = Validate::message($this->messages);
+            $validator = new \think\Validate();
+            $validator->message($this->messages);
+            $validator->batch(true);
             if ($validator->check($validData, $this->rules)) {
                 $data[] = $validData;
             } else if ($this->interruptOnFail) {
@@ -108,12 +108,11 @@ abstract class BaseExcel
                 $this->addFailure($row->getRowIndex(), $validData, $validator->getError());
             }
         }
-
         if ($this->hasErrors()) {
-            throw new ValidateException($this->getErrors());
+            throw new ValidateException(implode('\\r\\n', $this->getErrors()));
         }
 
-        $this->data = $data;
+        $this->setData($data);
     }
 
     private function validTitle(Spreadsheet $spreadsheet)
@@ -128,6 +127,7 @@ abstract class BaseExcel
                 $titleData[] = $cell->getValue(); // 获取单元格的值
             }
         }
+
         if (array_values($this->titles) !== $titleData) {
             throw new TemplateException("文档模板不正确");
         }
@@ -171,23 +171,29 @@ abstract class BaseExcel
             $columnIndex = count($this->titles);
             $column = Coordinate::stringFromColumnIndex($columnIndex);
             $cellRange = "A{$row}:{$column}{$row}";
-            $this->headerStyle($worksheet, $cellRange);
+            $this->headerStyle($worksheet, $cellRange, $row);
+            $this->explainStyle($worksheet, "A1:{$column}1", 1);
         }
         $worksheet->fromArray($headers);
     }
 
-    private function explainStyle($sheet, $headerRange)
+    private function explainStyle($sheet, $headerRange, $row = 1)
     {
         // 设置字体样式：加粗、字体大小、字体颜色
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
         $sheet->getStyle($headerRange)->getFont()->setSize(14);
-        $sheet->getStyle($headerRange)->getFont()->getColor()->setARGB(Color::COLOR_WHITE); // 设置字体为白色
+        $sheet->getStyle($headerRange)->getFont()->getColor()->setARGB(Color::COLOR_RED); // 设置字体为白色
         // 设置背景颜色：设置背景为渐变色或纯色
         $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID);
         $sheet->getStyle($headerRange)->getFill()->getStartColor()->setARGB(Color::COLOR_YELLOW); // 设置背景为黄色
+        $sheet->mergeCells($headerRange);
+        // 设置宽度和高度
+        $sheet->getRowDimension($row)->setRowHeight(50); // 设置第title行的高度
+        // 设置文本对齐方式：水平居中、垂直居中
+        $sheet->getStyle($headerRange)->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
     }
 
-    private function headerStyle($sheet, $headerRange)
+    private function headerStyle($sheet, $headerRange, $row = 1)
     {
         // 设置字体样式：加粗、字体大小、字体颜色
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
@@ -197,14 +203,23 @@ abstract class BaseExcel
         $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID);
         $sheet->getStyle($headerRange)->getFill()->getStartColor()->setARGB(Color::COLOR_CYAN); // 设置背景为绿色
 
-// 设置边框样式
+        // 设置边框样式
         $sheet->getStyle($headerRange)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
         $sheet->getStyle($headerRange)->getBorders()->getAllBorders()->getColor()->setARGB(Color::COLOR_BLACK); // 设置黑色边框
 
-// 设置文本对齐方式：水平居中、垂直居中
+        // 设置文本对齐方式：水平居中、垂直居中
         $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle($headerRange)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
+        // 设置宽度和高度
+        $sheet->getRowDimension($row)->setRowHeight(30); // 设置第title行的高度
+        $cellRange = Coordinate::extractAllCellReferencesInRange($headerRange);
+        // 遍历该范围内的所有列
+        foreach ($cellRange as $key => $item) {
+            // 将列的索引转换为字母
+            list($columnLetter,) = Coordinate::coordinateFromString($item);
+            $sheet->getColumnDimension($columnLetter)->setAutoSize(true); // 设置列宽自适应
+        }
     }
 
     private function addData(Spreadsheet $spreadsheet)

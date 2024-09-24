@@ -3,8 +3,6 @@
 
 namespace cores\library\Excel;
 
-use think\Collection;
-
 trait FailureRowCollection
 {
     protected array $failureRows = [];
@@ -30,15 +28,25 @@ trait FailureRowCollection
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getErrors(): Collection
+    public function getErrors(): array
     {
-        return Collection::make(array_values($this->failureRows));
+        $data = [];
+        foreach ($this->failureRows as $line => $failureRow) {
+            $error = implode('\\r\\n', $failureRow->errors()) ?? '未知错误';
+            $data[] = vsprintf("第【%d】行【%s】", [$line, $error]);
+        }
+        return $data;
+    }
+
+    public function getOriginErrors(): array
+    {
+        return $this->failureRows;
     }
 
     public function hasErrors(): bool
     {
-        return !$this->getErrors()->isEmpty();
+        return count($this->getErrors()) > 0;
     }
 }
