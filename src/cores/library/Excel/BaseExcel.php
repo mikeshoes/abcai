@@ -42,6 +42,11 @@ abstract class BaseExcel
         $this->data = $data;
     }
 
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
     protected function beforeDownload(Spreadsheet $spreadsheet)
     {
     }
