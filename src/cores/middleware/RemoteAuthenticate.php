@@ -46,6 +46,9 @@ class RemoteAuthenticate
             // 根据需求处理响应的结果
             $res = json_decode($response->getBody()->getContents(), true);
             if ($res['code'] !== 200) {
+                if ($res['code'] === 401) {
+                    throw new UnAuthenticatedException();
+                }
                 throw new DenyException($res['message']);
             }
 
