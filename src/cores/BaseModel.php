@@ -365,7 +365,7 @@ abstract class BaseModel extends Pivot
     public function autoCreateUserIdAttr()
     {
         if ($user = $this->getCurrentUser()) {
-            return $user->getKey();
+            return $user->id;
         }
         return 0;
     }
@@ -373,7 +373,7 @@ abstract class BaseModel extends Pivot
     public function autoUpdateUserIdAttr()
     {
         if ($user = $this->getCurrentUser()) {
-            return $user->getKey();
+            return $user->id;
         }
         return 0;
     }
