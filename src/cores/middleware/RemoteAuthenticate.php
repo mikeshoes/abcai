@@ -57,7 +57,7 @@ class RemoteAuthenticate
                 return new PropertyClass($res['data']);
             });
 
-            $request->addHeader("Saasid", $res['data']['saas_id']);
+            $request->addHeader("saasid", $res['data']['saas_id']);
 
         } catch (GuzzleException $e) {
             // 捕获 Guzzle 请求异常，并处理错误情况

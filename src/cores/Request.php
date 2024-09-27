@@ -16,6 +16,7 @@ class Request extends \think\Request
 
     public function addHeader($name, $value)
     {
+        $name = str_replace('_', '-', strtolower($name));
         $this->header[$name] = $value;
     }
 }
