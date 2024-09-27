@@ -29,7 +29,10 @@
   "autoload": {
     "psr-4": {
       "cores\\": "src/cores"
-    }
+    },
+    "files": [
+      "src/cores/helper/functions.php"
+    ]
   },
   "minimum-stability": "dev"
 }
