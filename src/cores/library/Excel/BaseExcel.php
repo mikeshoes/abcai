@@ -26,6 +26,7 @@ abstract class BaseExcel
     protected array $fields = [];
     protected array $titles = [];
     protected int $headingRow = 0;
+    protected int $maxRow = 1000;
     protected string $headerExplain = '';
     protected string $fileName;
     protected string $sheetName;
@@ -88,6 +89,9 @@ abstract class BaseExcel
         $activeSheet = $spreadsheet->getActiveSheet();
         $highestRow = $activeSheet->getHighestDataRow();
         $data = [];
+        if ($highestRow > $this->maxRow) {
+            throw new ValidateException("超过当前允许导入的最大数据行数[{$this->maxRow}]");
+        }
         foreach ($activeSheet->getRowIterator($this->headingRow + 1, $highestRow) as $row) {
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false); // 包括空单元格
