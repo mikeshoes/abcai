@@ -357,24 +357,13 @@ abstract class BaseModel extends Pivot
         return str_replace('-', '', Uuid::uuid4()->toString());
     }
 
-    private function getCurrentUser()
+    public function autoCreateUserIdAttr(): int
     {
-        return app(Request::class)->user();
+        return getCurrentUserId();
     }
 
-    public function autoCreateUserIdAttr()
+    public function autoUpdateUserIdAttr(): int
     {
-        if ($user = $this->getCurrentUser()) {
-            return $user->id;
-        }
-        return 0;
-    }
-
-    public function autoUpdateUserIdAttr()
-    {
-        if ($user = $this->getCurrentUser()) {
-            return $user->id;
-        }
-        return 0;
+        return getCurrentUserId();
     }
 }

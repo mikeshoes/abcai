@@ -9,6 +9,12 @@ if (!function_exists('getCurrentUser')) {
 }
 
 if (!function_exists('getCurrentUserId')) {
-    $user = getCurrentUser();
-    return $user->id ?? 0;
+    function getCurrentUserId()
+    {
+        $user = getCurrentUser();
+        if ($user) {
+            return $user->id;
+        }
+        return 0;
+    }
 }
