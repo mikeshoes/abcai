@@ -57,6 +57,10 @@ class RemoteAuthenticate
                 return new PropertyClass($res['data']);
             });
 
+            $request->setTokenResolver(function () use ($res) {
+                return $res['data']['token'];
+            });
+
             $request->addHeader("saasid", $res['data']['saas_id']);
 
         } catch (GuzzleException $e) {
