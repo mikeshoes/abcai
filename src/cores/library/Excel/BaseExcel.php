@@ -97,7 +97,7 @@ abstract class BaseExcel
             $cellIterator->setIterateOnlyExistingCells(false); // 包括空单元格
             $temData = [];
             foreach ($cellIterator as $cell) {
-                $temData[] = $cell->getValue(); // 获取单元格的值
+                $temData[] = $cell->getFormattedValue(); // 获取单元格的值
             }
             $validData = array_combine(array_keys($this->titles), $temData);
             $validator = new \think\Validate();
