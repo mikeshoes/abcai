@@ -29,9 +29,7 @@ class RemoteAuthenticate
         $client = new Client(['base_uri' => $remoteAuthUrl]);
         try {
             $path = $request->baseUrl();
-            // 转发当前请求到远程用户中心 添加proxy前缀
-            $remoteAuthUrl = sprintf("proxy%s", $path);
-            $response = $client->request($request->method(), $remoteAuthUrl, [
+            $response = $client->request($request->method(), $path, [
                 'headers' => $request->header(), // 转发原始请求的 headers
                 'query' => $request->get(), // 转发原始query
                 'json' => $request->param(),        // 转发原始请求的 body 参数 (json 数据)
