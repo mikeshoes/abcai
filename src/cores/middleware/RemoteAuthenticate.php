@@ -29,6 +29,7 @@ class RemoteAuthenticate
         $client = new Client(['base_uri' => $remoteAuthUrl]);
         try {
             $path = $request->baseUrl();
+            $path = ltrim($path, '/');
             $response = $client->request($request->method(), $path, [
                 'headers' => $request->header(), // 转发原始请求的 headers
                 'query' => $request->get(), // 转发原始query
