@@ -19,7 +19,7 @@ class WechatUser extends Base
             'secret' => $this->appSecret,
             'grant_type' => 'authorization_code',
             'js_code' => $code
-        ]));
+        ]), true);
         if (isset($result['errcode'])) {
             $this->error = $result['errmsg'];
             return false;
