@@ -164,9 +164,9 @@ abstract class BaseExcel
         $worksheet = $spreadsheet->getActiveSheet();
         $headers = [];
         $needMerge = false;
+        $headerRange = 'A1';
         if (!empty($this->headerExplain)) {
             $headers[] = [$this->headerExplain];
-            $this->explainStyle($worksheet, 'A1');
             $needMerge = true;
         }
 
@@ -179,9 +179,10 @@ abstract class BaseExcel
             $cellRange = "A{$row}:{$column}{$row}";
             $this->headerStyle($worksheet, $cellRange, $row);
             if ($needMerge) {
-                $this->explainStyle($worksheet, "A1:{$column}1", 1);
+                $headerRange = "A1:{$column}1";
             }
         }
+        $this->explainStyle($worksheet, $headerRange);
         $worksheet->fromArray($headers);
     }
 
