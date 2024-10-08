@@ -182,7 +182,9 @@ abstract class BaseExcel
                 $headerRange = "A1:{$column}1";
             }
         }
-        $this->explainStyle($worksheet, $headerRange);
+        if ($needMerge) {
+            $this->explainStyle($worksheet, $headerRange);
+        }
         $worksheet->fromArray($headers);
     }
 
