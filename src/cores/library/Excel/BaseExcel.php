@@ -147,6 +147,8 @@ abstract class BaseExcel
         header(vsprintf('Content-Disposition: attachment; filename="%s"', [rawurlencode($this->fileName)]));
         header('Cache-Control: max-age=0');
         header('Pragma: public');
+        // 2024-10-09 解决跨域问题
+        header('Access-Control-Allow-Origin: *');
 
         // 创建 Xlsx 文件流并输出到 PHP 输出流
         $writer = new Xlsx($spreadsheet);
