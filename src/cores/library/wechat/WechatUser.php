@@ -27,4 +27,24 @@ class WechatUser extends Base
         return $result;
     }
 
+    /**
+     * code 换取 access_token 公众号
+     * 这是一个 HTTPS 接口，开发者服务器使用登录凭证 code 获取 session_key 和 openid。
+     * @throws BaseException
+     */
+    public function oauthCode2session(string $code)
+    {
+        $url = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+        $result = json_decode($this->get($url, [
+            'appid' => $this->appId,
+            'secret' => $this->appSecret,
+            'grant_type' => 'authorization_code',
+            'code' => $code
+        ]), true);
+        if (isset($result['errcode'])) {
+            $this->error = $result['errmsg'];
+            return false;
+        }
+        return $result;
+    }
 }
