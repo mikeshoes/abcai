@@ -80,11 +80,12 @@ abstract class BaseModel extends Pivot
      * 获取当前的租户
      * @return void
      */
-    private static function saasId(): void
+    private static function saasId()
     {
         if (empty(self::$saasId)) {
             self::$saasId = \getSaasId();
         }
+        return self::$saasId;
     }
 
     /**
@@ -349,7 +350,7 @@ abstract class BaseModel extends Pivot
 
     public function autoSaasIdAttr(): ?int
     {
-        return self::$saasId ?? 0;
+        return static::saasId();
     }
 
     public function autoUcodeAttr(): ?string
