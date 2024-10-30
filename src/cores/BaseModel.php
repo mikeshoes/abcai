@@ -49,7 +49,7 @@ abstract class BaseModel extends Pivot
 
     protected $readonly = ['saas_id', 'create_user_id', 'create_time'];
 
-    private array $customHidden = [
+    protected array $customHidden = [
         'password',
         'update_user_id',
         'create_user_id',
