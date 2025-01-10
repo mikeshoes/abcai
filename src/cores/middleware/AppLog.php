@@ -45,4 +45,15 @@ class AppLog
     {
         // todo 设计日志存储
     }
+
+    /**
+     * 获取请求路径信息
+     * @param \think\Request $request
+     * @return string
+     */
+    private function getVisitor(\think\Request $request): string
+    {
+        $data = [$request->ip(), $request->method(), $request->url(true)];
+        return implode(' ', $data);
+    }
 }
