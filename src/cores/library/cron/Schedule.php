@@ -16,7 +16,7 @@ abstract class Schedule extends Command
         $this->init($this->getConsole());
     }
 
-    public abstract function init(Console $console);
+    public abstract function init($console);
 
     private function loadCronSupport(): array
     {
