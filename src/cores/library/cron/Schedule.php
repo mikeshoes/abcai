@@ -2,21 +2,16 @@
 
 namespace cores\library\cron;
 
-use think\Console;
 use think\console\Command;
 use think\Exception;
 
-abstract class Schedule extends Command
+class Schedule extends Command
 {
     public function configure()
     {
         $this->setName("schedule")
             ->setDescription("执行定时任务");
-
-        $this->init($this->getConsole());
     }
-
-    public abstract function init($console);
 
     private function loadCronSupport(): array
     {
