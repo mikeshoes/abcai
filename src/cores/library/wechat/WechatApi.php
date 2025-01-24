@@ -19,7 +19,7 @@ class WechatApi extends Base
                 'template_id' => $templateId,
                 'data' => $data,
             ] + $options;
-        $result = $this->post($url, $data);
+        $result = $this->post($url, json_encode($data));
         $result = json_decode($result, true);
         if (!empty($result['errcode'])) {
             $this->error = $result['errmsg'];
