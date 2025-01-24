@@ -52,7 +52,7 @@ class Base
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$this->appId}&secret={$this->appSecret}";
             $result = $this->get($url);
             $response = $this->jsonDecode($result);
-            if (array_key_exists('errcode', $response)) {
+            if (isset($response['errcode'])) {
                 throw new BaseException("access_token获取失败，错误信息：{$result}");
             }
             // 记录日志
@@ -174,6 +174,6 @@ class Base
      */
     protected function jsonDecode($json)
     {
-        return json_decode($json);
+        return json_decode($json, true);
     }
 }
