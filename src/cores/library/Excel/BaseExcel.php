@@ -99,7 +99,11 @@ abstract class BaseExcel
             foreach ($cellIterator as $cell) {
                 $temData[] = $cell->getFormattedValue(); // 获取单元格的值
             }
-            if (empty($temData)) {
+            // 判断$temData列表中的每个元素是否为空，如果为空则跳过该行
+            $allEmpty = empty(array_filter($temData, function($value) {
+                return !empty($value);
+            }));
+            if ($allEmpty) {
                 continue;
             }
             $validData = array_combine(array_keys($this->titles), $temData);
