@@ -99,6 +99,9 @@ abstract class BaseExcel
             foreach ($cellIterator as $cell) {
                 $temData[] = $cell->getFormattedValue(); // 获取单元格的值
             }
+            if (empty($temData)) {
+                continue;
+            }
             $validData = array_combine(array_keys($this->titles), $temData);
             $validator = new \think\Validate();
             $validator->message($this->messages);
