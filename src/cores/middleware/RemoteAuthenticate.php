@@ -5,6 +5,7 @@ namespace cores\middleware;
 use cores\exception\DenyException;
 use cores\exception\UnAuthenticatedException;
 use cores\library\PropertyClass;
+use cores\provider\UserProvider;
 use cores\Request;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -61,6 +62,8 @@ class RemoteAuthenticate
             });
 
             $request->addHeader("saasid", $res['data']['saas_id']);
+
+            app(UserProvider::class)->syncUser($request->user());
 
         } catch (GuzzleException $e) {
             // 捕获 Guzzle 请求异常，并处理错误情况

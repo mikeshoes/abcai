@@ -12,6 +12,13 @@ interface UserProvider
      *
      * @param string $token
      */
-    public function retrieveByToken(String $token);
+    public function retrieveByToken(string $token);
+
+    /**
+     * remote登录后同步数据
+     * @param $user
+     * @return mixed
+     */
+    public function syncUser($user);
 
 }
