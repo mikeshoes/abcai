@@ -47,7 +47,7 @@ abstract class BaseModel extends Pivot
 
     protected array $autoFillField = ['saas_id', 'create_user_id', 'update_user_id', 'ucode'];
 
-    protected $readonly = ['saas_id', 'create_user_id', 'create_time'];
+    protected $readonly = ['saas_id', 'ucode', 'create_user_id', 'create_time'];
 
     protected array $customHidden = [
         'password',
