@@ -31,8 +31,10 @@ class RemoteAuthenticate
         try {
             $path = $request->baseUrl();
             $path = ltrim($path, '/');
+            $headers = $request->header();
+            unset($headers['content-length']); // 避免因上传文件接口的content-length过大 导致鉴权curl出错
             $response = $client->request($request->method(), $path, [
-                'headers' => $request->header(), // 转发原始请求的 headers
+                'headers' => $headers, // 转发原始请求的 headers
                 'query' => $request->get(), // 转发原始query
                 'json' => $request->param(),        // 转发原始请求的 body 参数 (json 数据)
                 'timeout' => 5,                        // 设置请求超时
