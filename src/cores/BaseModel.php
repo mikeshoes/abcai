@@ -40,6 +40,9 @@ abstract class BaseModel extends Pivot
     // 是否允许全局查询saasId
     protected bool $isGlobalScopeSassId = true;
 
+    // 自动写入时间
+    protected $autoWriteTimestamp = true;
+
     // 默认删除字段值
     protected $defaultSoftDelete = 0;
 
